@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Box, TextField, Button, Typography, colors, Skeleton, Divider } from "@mui/material";
 import { runChat } from "@/services/gemini";
 import { useTheme } from "@mui/system";
@@ -44,9 +44,8 @@ const Chat: React.FC = () => {
     <Box sx={{ flex: 1 }}>
       <Box>
         {messages.map((message, index) => (
-          <>
+          <React.Fragment key={uuidv4()}>
             <Typography
-              key={uuidv4()}
               style={{ color: message.role === "model" ? theme.palette.text.primary : theme.palette.text.secondary }}>
               <span>{message.role === "user" ? "Você" : "Nexus"}</span>:{" "}
               {message.parts.map((part: IMessagePart) => part.text).join(" ")}
@@ -54,7 +53,7 @@ const Chat: React.FC = () => {
             {message.role === "model" && index !== messages.length - 1 ? (
               <Divider sx={{ margin: "1rem 0 1rem 0" }} />
             ) : null}
-          </>
+          </React.Fragment>
         ))}
         {isSending && (
           <>
@@ -69,7 +68,15 @@ const Chat: React.FC = () => {
           variant="outlined"
           fullWidth
           value={newMessage}
+          disabled={isSending}
+          autoComplete="off"
           onChange={handleNewMessageChange}
+          onKeyDown={(event) => {
+            if (event.key === "Enter") {
+              handleSendMessage();
+              event.preventDefault();
+            }
+          }}
         />
         <Button
           sx={{ borderRadius: "0 16px 16px 0" }}

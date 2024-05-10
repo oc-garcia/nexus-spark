@@ -31,8 +31,10 @@ const LoggedOut: React.FC<LoggedOutProps> = ({ handleGoogleSignIn }) => {
           startIcon={<GoogleIcon />}
           size="large"
           variant="contained"
-          color="primary"
-          onClick={handleGoogleSignIn}>Entrar</Button>
+          color={theme.palette.mode === "dark" ? "primary" : "secondary"}
+          onClick={handleGoogleSignIn}>
+          Entrar
+        </Button>
       </div>
     </Box>
   );

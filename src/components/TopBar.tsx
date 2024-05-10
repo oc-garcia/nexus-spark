@@ -11,6 +11,7 @@ import { useUser } from "@/context/UserContext";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { signOut } from "firebase/auth";
 import { auth } from "@/firebase/firebase";
+import HubIcon from "@mui/icons-material/Hub";
 
 interface TopBarProps {
   toggleTheme: () => void;
@@ -28,11 +29,12 @@ export default function TopBar({ toggleTheme }: TopBarProps) {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
+          <HubIcon sx={{ marginRight: "0.5rem" }} color={theme.palette.mode === "dark" ? "primary" : "secondary"} />
           <Typography variant={matches ? "h4" : "h6"} noWrap component="h1" sx={{ flexGrow: 1 }}>
             Nexus Spark
           </Typography>
           {user && (
-            <IconButton  color="inherit" onClick={handleSignOut}>
+            <IconButton color="inherit" onClick={handleSignOut}>
               <LogoutIcon />
             </IconButton>
           )}

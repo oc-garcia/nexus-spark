@@ -7,13 +7,14 @@ import { getRedirectResult, GoogleAuthProvider, onAuthStateChanged, signInWithRe
 import { useEffect, useState } from "react";
 import LoggedOut from "@/components/LoggedOut";
 import LoggedIn from "@/components/LoggedIn";
+import { useUser } from "@/context/UserContext";
 
 interface HomeProps {
   toggleTheme: () => void;
 }
 
 export default function Home({ toggleTheme }: HomeProps) {
-  const [user, setUser] = useState<User | null>(null);
+  const { user, setUser } = useUser();
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "info" | "warning" | "error">("info");

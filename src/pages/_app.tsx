@@ -7,6 +7,7 @@ import Head from "next/head";
 import React from "react";
 import { PaletteMode } from "@mui/material";
 import { Analytics } from "@vercel/analytics/react";
+import { UserProvider } from "@/context/UserContext";
 
 export default function MyApp(props: AppProps) {
   let { Component, pageProps } = props;
@@ -49,12 +50,14 @@ export default function MyApp(props: AppProps) {
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
         <meta name="description" content="Nexus Spark" />
       </Head>
-        <QueryClientProvider client={queryClient}>
-          <ThemeProvider theme={theme}>
+      <QueryClientProvider client={queryClient}>
+        <ThemeProvider theme={theme}>
+          <UserProvider >
             <Component {...pageProps} />
             <Analytics />
-          </ThemeProvider>
-        </QueryClientProvider>
+          </UserProvider>
+        </ThemeProvider>
+      </QueryClientProvider>
     </AppCacheProvider>
   );
 }

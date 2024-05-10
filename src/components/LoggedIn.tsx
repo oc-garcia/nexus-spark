@@ -1,7 +1,6 @@
-import { auth } from "@/firebase/firebase";
-import { Avatar, Button, Typography, useTheme } from "@mui/material";
+import { Avatar, Typography, useTheme } from "@mui/material";
 import { Box } from "@mui/system";
-import { signOut, User } from "firebase/auth";
+import { User } from "firebase/auth";
 import Chat from "./Chat";
 
 interface LoggedInProps {
@@ -10,9 +9,7 @@ interface LoggedInProps {
 
 const LoggedIn: React.FC<LoggedInProps> = ({ user }) => {
   const theme = useTheme();
-  const handleSignOut = () => {
-    signOut(auth);
-  };
+
   return (
     <>
       <Box
@@ -30,9 +27,6 @@ const LoggedIn: React.FC<LoggedInProps> = ({ user }) => {
             Vamos iniciar o seu atendimento?
           </Typography>
         </div>
-        <Button variant="contained" color="secondary" onClick={handleSignOut}>
-          Sair
-        </Button>
       </Box>
       <Box
         sx={{

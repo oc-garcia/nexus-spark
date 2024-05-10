@@ -10,6 +10,7 @@ import Brightness7Icon from "@mui/icons-material/Brightness7";
 import { useUser } from "@/context/UserContext";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { signOut } from "firebase/auth";
+import { auth } from "@/firebase/firebase";
 
 interface TopBarProps {
   toggleTheme: () => void;

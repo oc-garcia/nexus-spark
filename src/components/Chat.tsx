@@ -16,7 +16,7 @@ interface ChatProps {
 
 const Chat: React.FC<ChatProps> = ({ user }) => {
   const [messages, setMessages] = useState<IMessage[]>([...systemDirective]);
-  const [newMessage, setNewMessage] = useState("Gostaria de agendar uma consulta");
+  const [newMessage, setNewMessage] = useState("");
   const [isSending, setIsSending] = useState(false);
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const theme = useTheme();
@@ -61,7 +61,6 @@ const Chat: React.FC<ChatProps> = ({ user }) => {
     setOpenSnackbar(false);
   };
 
-  console.log(user);
   return (
     <Box sx={{ flex: 1 }}>
       <Box>

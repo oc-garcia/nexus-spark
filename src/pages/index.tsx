@@ -83,11 +83,16 @@ export default function Home({ toggleTheme }: HomeProps) {
           bgcolor: (theme) => theme.palette.background.default,
         }}>
         {loading ? (
-          <>
-            <Skeleton variant="rectangular" width="100%" height="20vh" />
-            <Skeleton variant="rectangular" width="100%" height="20vh" />
-            <Skeleton variant="rectangular" width="100%" height="20vh" />
-          </>
+          <Box
+            sx={{
+              flex: 1,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+            }}>
+            <Skeleton variant="rectangular" width="100%" height="70vh" />
+          </Box>
         ) : user ? (
           <LoggedIn user={user} />
         ) : (

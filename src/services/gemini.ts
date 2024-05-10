@@ -1,9 +1,11 @@
+import { IMessage } from "@/interfaces/IMessage";
+
 const { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } = require("@google/generative-ai");
 
 const MODEL_NAME = "gemini-1.5-pro-latest";
 const API_KEY = process.env.NEXT_PUBLIC_GOOGLE_CLOUD_API_KEY;
 
-export async function runChat(userInput: string) {
+export async function runChat(userInput: string, history: IMessage[]) {
   const genAI = new GoogleGenerativeAI(API_KEY);
   const model = genAI.getGenerativeModel({ model: MODEL_NAME });
 
@@ -36,11 +38,10 @@ export async function runChat(userInput: string) {
   const chat = model.startChat({
     generationConfig,
     safetySettings,
-    history: [],
+    history,
   });
 
   const result = await chat.sendMessage(userInput);
   const response = result.response;
   return response.text();
-  
 }

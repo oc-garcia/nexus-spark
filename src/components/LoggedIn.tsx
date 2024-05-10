@@ -34,7 +34,7 @@ const LoggedIn: React.FC<LoggedInProps> = ({ user }) => {
           alignItems: "center",
           justifyContent: "space-between",
         }}>
-        <Chat />
+        <Chat user={user} />
       </Box>
     </>
   );

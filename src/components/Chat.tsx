@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, TextField, Button, Typography, colors, Skeleton, Divider } from "@mui/material";
+import { Box, TextField, Button, Typography, colors, Skeleton, Divider, Snackbar, Alert } from "@mui/material";
 import { runChat } from "@/services/gemini";
 import { useTheme } from "@mui/system";
 import { IMessage, IMessagePart } from "@/interfaces/IMessage";
@@ -8,11 +8,17 @@ import AutorenewIcon from "@mui/icons-material/Autorenew";
 import { keyframes } from "@emotion/react";
 import { v4 as uuidv4 } from "uuid";
 import { systemDirective } from "@/utils/geminiDirectives";
+import { User } from "firebase/auth";
 
-const Chat: React.FC = () => {
+interface ChatProps {
+  user: User | null;
+}
+
+const Chat: React.FC<ChatProps> = ({ user }) => {
   const [messages, setMessages] = useState<IMessage[]>([...systemDirective]);
   const [newMessage, setNewMessage] = useState("Gostaria de agendar uma consulta");
   const [isSending, setIsSending] = useState(false);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
   const theme = useTheme();
 
   const handleNewMessageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -27,6 +33,13 @@ const Chat: React.FC = () => {
       parts: [{ text: newMessage }],
     };
     const responseText = await runChat(newMessage, messages);
+    if (responseText === "error") {
+      setMessages([...systemDirective]);
+      setNewMessage("");
+      setIsSending(false);
+      setOpenSnackbar(true);
+      return;
+    }
     const botMessage: IMessage = {
       role: "model",
       parts: [{ text: responseText }],
@@ -41,8 +54,14 @@ const Chat: React.FC = () => {
   100% { transform: rotate(360deg); }
 `;
 
-  const slicedMessages = messages.slice(2);
+  const handleCloseSnackbar = (event: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenSnackbar(false);
+  };
 
+  console.log(user);
   return (
     <Box sx={{ flex: 1 }}>
       <Box>
@@ -92,6 +111,11 @@ const Chat: React.FC = () => {
           Enviar
         </Button>
       </Box>
+      <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={handleCloseSnackbar}>
+        <Alert onClose={handleCloseSnackbar} severity="error" sx={{ width: "100%" }}>
+          Ocorreu um erro. O chat foi reiniciado.
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };

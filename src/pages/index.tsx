@@ -2,7 +2,7 @@ import TopBar from "@/components/TopBar";
 import Footer from "@/components/Footer";
 import { Alert, Box, Skeleton, Snackbar } from "@mui/material";
 import { auth } from "@/firebase/firebase";
-import { User } from "firebase/auth";
+import { signInWithPopup } from "firebase/auth";
 import { getRedirectResult, GoogleAuthProvider, onAuthStateChanged, signInWithRedirect } from "firebase/auth";
 import { useEffect, useState } from "react";
 import LoggedOut from "@/components/LoggedOut";
@@ -50,9 +50,23 @@ export default function Home({ toggleTheme }: HomeProps) {
   }, []);
 
   const handleGoogleSignIn = () => {
-    signInWithRedirect(auth, provider);
+    signInWithRedirect(auth, provider).catch((error) => {
+      console.error(error);
+      signInWithPopup(auth, provider)
+        .then((result) => {
+          const credential = GoogleAuthProvider.credentialFromResult(result);
+          const token = credential?.accessToken;
+          const user = result.user;
+          setUser(user);
+        })
+        .catch((error) => {
+          console.error(error);
+          setSnackbarMessage("Erro ao fazer login");
+          setSnackbarSeverity("error");
+          setSnackbarOpen(true);
+        });
+    });
   };
-
   const handleSnackbarClose = (event: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === "clickaway") {
       return;

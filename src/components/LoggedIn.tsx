@@ -13,7 +13,6 @@ const LoggedIn: React.FC<LoggedInProps> = ({ user }) => {
   const handleSignOut = () => {
     signOut(auth);
   };
-  console.log(process.env.NEXT_PUBLIC_GOOGLE_CLOUD_API_KEY); // This will log the value of
   return (
     <>
       <Box

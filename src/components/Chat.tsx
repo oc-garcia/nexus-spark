@@ -68,6 +68,7 @@ const Chat: React.FC = () => {
           variant="outlined"
           fullWidth
           value={newMessage}
+          color={theme.palette.mode === "dark" ? "primary" : "secondary"}
           disabled={isSending}
           autoComplete="off"
           onChange={handleNewMessageChange}
@@ -81,7 +82,7 @@ const Chat: React.FC = () => {
         <Button
           sx={{ borderRadius: "0 16px 16px 0" }}
           variant="contained"
-          color="primary"
+          color={theme.palette.mode === "dark" ? "primary" : "secondary"}
           onClick={handleSendMessage}
           disabled={isSending}
           endIcon={isSending ? <AutorenewIcon sx={{ animation: `${spin} 2s linear infinite` }} /> : <SendIcon />}>

@@ -42,4 +42,5 @@ export async function runChat(userInput: string) {
   const result = await chat.sendMessage(userInput);
   const response = result.response;
   return response.text();
+  
 }

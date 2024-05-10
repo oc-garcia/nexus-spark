@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Box, TextField, Button, Typography, colors, Skeleton } from "@mui/material";
+import { Box, TextField, Button, Typography, colors, Skeleton, Divider } from "@mui/material";
 import { runChat } from "@/services/gemini";
 import { useTheme } from "@mui/system";
 import { IMessage, IMessagePart } from "@/interfaces/IMessage";
@@ -44,10 +44,17 @@ const Chat: React.FC = () => {
     <Box sx={{ flex: 1 }}>
       <Box>
         {messages.map((message, index) => (
-          <Typography key={index} style={{ color: theme.palette.text.primary }}>
-            <span>{message.role === "user" ? "Você" : "Nexus"}</span>:{" "}
-            {message.parts.map((part: IMessagePart) => part.text).join(" ")}
-          </Typography>
+          <>
+            <Typography
+              key={index}
+              style={{ color: message.role === "model" ? theme.palette.text.primary : theme.palette.text.secondary }}>
+              <span>{message.role === "user" ? "Você" : "Nexus"}</span>:{" "}
+              {message.parts.map((part: IMessagePart) => part.text).join(" ")}
+            </Typography>
+            {message.role === "model" && index !== messages.length - 1 ? (
+              <Divider sx={{ margin: "1rem 0 1rem 0" }} />
+            ) : null}
+          </>
         ))}
         {isSending && (
           <>

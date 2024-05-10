@@ -23,7 +23,7 @@ const LoggedIn: React.FC<LoggedInProps> = ({ user }) => {
           <Typography variant="h5" gutterBottom style={{ color: theme.palette.text.primary }}>
             Olá, {user?.displayName}!
           </Typography>
-          <Typography variant="body1" gutterBottom style={{ color: theme.palette.text.secondary }}>
+          <Typography variant="body1" gutterBottom style={{ color: theme.palette.text.primary }}>
             Vamos iniciar o seu atendimento?
           </Typography>
         </div>

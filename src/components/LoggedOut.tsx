@@ -21,20 +21,18 @@ const LoggedOut: React.FC<LoggedOutProps> = ({ handleGoogleSignIn }) => {
       }}>
       <div>
         <Typography variant="h5" gutterBottom style={{ color: theme.palette.text.primary }}>
-          Bem-vindo à Nexus Spark, secretaria Virtual alavancada pelo Gemini do Google.
+          Nexus Spark: Sua secretária virtual com tecnologia Google AI.
         </Typography>
         <Typography variant="body1" gutterBottom style={{ color: theme.palette.text.secondary }}>
-          Ela é uma secretária virtual que marca compromissos com profissionais. Para começar, faça login com sua conta
-          do Google.
+          Agende compromissos com profissionais de forma simples e eficiente. Para começar, faça login com sua conta do
+          Google.
         </Typography>
         <Button
           startIcon={<GoogleIcon />}
           size="large"
           variant="contained"
           color="primary"
-          onClick={handleGoogleSignIn}>
-          Faça Login para Continuar
-        </Button>
+          onClick={handleGoogleSignIn}>Entrar</Button>
       </div>
     </Box>
   );

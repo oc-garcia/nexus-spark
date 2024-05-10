@@ -2,7 +2,7 @@
 
 ## Sobre o Projeto
 
-Nexus Spark é um chatbot desenvolvido com Next.js e integrado ao modelo de linguagem de grande porte Gemini, da Google AI. Este projeto foi realizado como parte da minha participação no evento "Imersão Inteligência Artificial", que explora o potencial da IA e do Gemini na criação de projetos inovadores.
+Nexus Spark é um chatbot desenvolvido com Next.js e integrado ao modelo de linguagem de grande porte Gemini, da Google AI. Este projeto foi realizado como parte da minha participação no evento "Imersão Inteligência Artificial" do Google e Alura, que explora o potencial da IA e do Gemini na criação de projetos inovadores.
 
 O objetivo do projeto é fornecer uma experiência de conversação fluida e informativa para os usuários, aproveitando as capacidades avançadas de processamento de linguagem natural do Gemini. O projeto também inclui autenticação de usuários com Firebase para oferecer uma experiência mais personalizada e segura.
 

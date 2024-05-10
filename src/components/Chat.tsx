@@ -6,6 +6,7 @@ import { IMessage, IMessagePart } from "@/interfaces/IMessage";
 import SendIcon from "@mui/icons-material/Send";
 import AutorenewIcon from "@mui/icons-material/Autorenew";
 import { keyframes } from "@emotion/react";
+import { v4 as uuidv4 } from "uuid";
 
 const Chat: React.FC = () => {
   const [messages, setMessages] = useState<IMessage[]>([]);
@@ -25,7 +26,6 @@ const Chat: React.FC = () => {
       parts: [{ text: newMessage }],
     };
     const responseText = await runChat(newMessage, messages);
-    console.log(responseText);
     const botMessage: IMessage = {
       role: "model",
       parts: [{ text: responseText }],
@@ -46,7 +46,7 @@ const Chat: React.FC = () => {
         {messages.map((message, index) => (
           <>
             <Typography
-              key={index}
+              key={uuidv4()}
               style={{ color: message.role === "model" ? theme.palette.text.primary : theme.palette.text.secondary }}>
               <span>{message.role === "user" ? "Você" : "Nexus"}</span>:{" "}
               {message.parts.map((part: IMessagePart) => part.text).join(" ")}

@@ -1,6 +1,6 @@
 import TopBar from "@/components/TopBar";
 import Footer from "@/components/Footer";
-import { Alert, Box, Snackbar } from "@mui/material";
+import { Alert, Box, Skeleton, Snackbar } from "@mui/material";
 import { auth } from "@/firebase/firebase";
 import { User } from "firebase/auth";
 import { getRedirectResult, GoogleAuthProvider, onAuthStateChanged, signInWithRedirect } from "firebase/auth";
@@ -14,6 +14,7 @@ interface HomeProps {
 }
 
 export default function Home({ toggleTheme }: HomeProps) {
+  const [loading, setLoading] = useState(true);
   const { user, setUser } = useUser();
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
@@ -34,15 +35,15 @@ export default function Home({ toggleTheme }: HomeProps) {
         if (result) {
           const user = result.user;
           const credential = GoogleAuthProvider.credentialFromResult(result);
-          const token = credential?.accessToken;
-        }
+          const token = credential?.accessToken;        }
       })
       .catch((error) => {
-        const errorCode = error.code;
         const errorMessage = error.message;
-        const email = error.email;
-        const credential = error.credential;
-      });
+        setSnackbarMessage(errorMessage);
+        setSnackbarSeverity("error");
+        setSnackbarOpen(true);
+      })
+      .finally(() => setLoading(false));
 
     return () => unsubscribe();
   }, []);
@@ -80,8 +81,18 @@ export default function Home({ toggleTheme }: HomeProps) {
           gap: "1rem",
           bgcolor: (theme) => theme.palette.background.default,
         }}>
-        {user ? <LoggedIn user={user} /> : <LoggedOut handleGoogleSignIn={handleGoogleSignIn} />}
-        <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose}>
+        {loading ? (
+          <>
+            <Skeleton variant="rectangular" width="100%" height="20vh" />
+            <Skeleton variant="rectangular" width="100%" height="20vh" />
+            <Skeleton variant="rectangular" width="100%" height="20vh" />
+          </>
+        ) : user ? (
+          <LoggedIn user={user} />
+        ) : (
+          <LoggedOut handleGoogleSignIn={handleGoogleSignIn} />
+        )}
+        <Snackbar open={snackbarOpen} autoHideDuration={3000} onClose={handleSnackbarClose}>
           <Alert onClose={handleSnackbarClose} severity={snackbarSeverity} sx={{ width: "100%" }}>
             {snackbarMessage}
           </Alert>

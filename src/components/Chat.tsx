@@ -1,8 +1,11 @@
 import { useState } from "react";
-import { Box, TextField, Button, Typography, colors } from "@mui/material";
+import { Box, TextField, Button, Typography, colors, Skeleton } from "@mui/material";
 import { runChat } from "@/services/gemini";
 import { useTheme } from "@mui/system";
 import { IMessage, IMessagePart } from "@/interfaces/IMessage";
+import SendIcon from "@mui/icons-material/Send";
+import AutorenewIcon from "@mui/icons-material/Autorenew";
+import { keyframes } from "@emotion/react";
 
 const Chat: React.FC = () => {
   const [messages, setMessages] = useState<IMessage[]>([]);
@@ -32,8 +35,13 @@ const Chat: React.FC = () => {
     setIsSending(false);
   };
 
+  const spin = keyframes`
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+`;
+
   return (
-    <Box>
+    <Box sx={{ flex: 1 }}>
       <Box>
         {messages.map((message, index) => (
           <Typography key={index} style={{ color: theme.palette.text.primary }}>
@@ -41,10 +49,28 @@ const Chat: React.FC = () => {
             {message.parts.map((part: IMessagePart) => part.text).join(" ")}
           </Typography>
         ))}
+        {isSending && (
+          <>
+            <Skeleton variant="text" sx={{ fontSize: "1rem" }} />
+            <Skeleton variant="text" sx={{ fontSize: "1rem" }} />
+          </>
+        )}
       </Box>
-      <Box>
-        <TextField variant="outlined" fullWidth value={newMessage} onChange={handleNewMessageChange} />
-        <Button variant="contained" color="primary" onClick={handleSendMessage} disabled={isSending}>
+      <Box sx={{ display: "flex", marginTop: "1rem" }}>
+        <TextField
+          sx={{ borderRadius: "0 16px 16px 0" }}
+          variant="outlined"
+          fullWidth
+          value={newMessage}
+          onChange={handleNewMessageChange}
+        />
+        <Button
+          sx={{ borderRadius: "0 16px 16px 0" }}
+          variant="contained"
+          color="primary"
+          onClick={handleSendMessage}
+          disabled={isSending}
+          endIcon={isSending ? <AutorenewIcon sx={{ animation: `${spin} 2s linear infinite` }} /> : <SendIcon />}>
           Enviar
         </Button>
       </Box>

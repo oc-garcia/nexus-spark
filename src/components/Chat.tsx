@@ -7,10 +7,11 @@ import SendIcon from "@mui/icons-material/Send";
 import AutorenewIcon from "@mui/icons-material/Autorenew";
 import { keyframes } from "@emotion/react";
 import { v4 as uuidv4 } from "uuid";
+import { systemDirective } from "@/utils/geminiDirectives";
 
 const Chat: React.FC = () => {
-  const [messages, setMessages] = useState<IMessage[]>([]);
-  const [newMessage, setNewMessage] = useState("");
+  const [messages, setMessages] = useState<IMessage[]>([...systemDirective]);
+  const [newMessage, setNewMessage] = useState("Gostaria de agendar uma consulta");
   const [isSending, setIsSending] = useState(false);
   const theme = useTheme();
 
@@ -43,7 +44,7 @@ const Chat: React.FC = () => {
   return (
     <Box sx={{ flex: 1 }}>
       <Box>
-        {messages.map((message, index) => (
+        {messages.slice(2).map((message, index) => (
           <React.Fragment key={uuidv4()}>
             <Typography
               style={{ color: message.role === "model" ? theme.palette.text.primary : theme.palette.text.secondary }}>

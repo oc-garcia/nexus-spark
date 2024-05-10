@@ -27,6 +27,12 @@ const LoggedOut: React.FC<LoggedOutProps> = ({ handleGoogleSignIn }) => {
           Agende compromissos com profissionais de forma simples e eficiente. Para começar, faça login com sua conta do
           Google.
         </Typography>
+        <Typography
+          variant="body1"
+          gutterBottom
+          style={{ color: theme.palette.mode === "dark" ? theme.palette.info.dark : theme.palette.info.main }}>
+          Esse modelo foi treinado para atendimento de consultas com um advogado chamado Octávio.
+        </Typography>
         <Button
           startIcon={<GoogleIcon />}
           size="large"

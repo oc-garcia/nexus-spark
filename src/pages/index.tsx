@@ -35,11 +35,12 @@ export default function Home({ toggleTheme }: HomeProps) {
         if (result) {
           const user = result.user;
           const credential = GoogleAuthProvider.credentialFromResult(result);
-          const token = credential?.accessToken;        }
+          const token = credential?.accessToken;
+        }
       })
       .catch((error) => {
-        const errorMessage = error.message;
-        setSnackbarMessage(errorMessage);
+        console.error(error);
+        setSnackbarMessage("Erro ao fazer login");
         setSnackbarSeverity("error");
         setSnackbarOpen(true);
       })

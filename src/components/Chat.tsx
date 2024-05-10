@@ -41,6 +41,8 @@ const Chat: React.FC = () => {
   100% { transform: rotate(360deg); }
 `;
 
+  const slicedMessages = messages.slice(2);
+
   return (
     <Box sx={{ flex: 1 }}>
       <Box>
@@ -51,7 +53,7 @@ const Chat: React.FC = () => {
               <span>{message.role === "user" ? "Você" : "Nexus"}</span>:{" "}
               {message.parts.map((part: IMessagePart) => part.text).join(" ")}
             </Typography>
-            {message.role === "model" && index !== messages.length - 1 ? (
+            {message.role === "model" && index !== messages.slice(2).length - 1 ? (
               <Divider sx={{ margin: "1rem 0 1rem 0" }} />
             ) : null}
           </React.Fragment>

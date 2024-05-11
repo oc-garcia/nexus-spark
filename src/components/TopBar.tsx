@@ -25,6 +25,7 @@ export default function TopBar({ toggleTheme }: TopBarProps) {
     signOut(auth);
   };
 
+  
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">

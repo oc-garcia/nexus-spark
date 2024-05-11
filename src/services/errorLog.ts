@@ -4,7 +4,7 @@ import { addDoc, collection } from "firebase/firestore";
 export const logErrorToFirestore = async (error: any) => {
   try {
     await addDoc(collection(db, "errors"), {
-      error,
+      ...error,
       time: new Date().toISOString(),
     });
   } catch (e) {

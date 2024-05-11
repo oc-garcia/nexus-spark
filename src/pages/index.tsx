@@ -2,8 +2,13 @@ import TopBar from "@/components/TopBar";
 import Footer from "@/components/Footer";
 import { Alert, Box, Skeleton, Snackbar } from "@mui/material";
 import { auth } from "@/firebase/firebase";
-import { signInWithPopup } from "firebase/auth";
-import { getRedirectResult, GoogleAuthProvider, onAuthStateChanged, signInWithRedirect } from "firebase/auth";
+import {
+  browserLocalPersistence,
+  getRedirectResult,
+  GoogleAuthProvider,
+  onAuthStateChanged,
+  setPersistence,
+} from "firebase/auth";
 import { useEffect, useState } from "react";
 import LoggedOut from "@/components/LoggedOut";
 import LoggedIn from "@/components/LoggedIn";
@@ -24,20 +29,32 @@ export default function Home({ toggleTheme }: HomeProps) {
   const provider = new GoogleAuthProvider();
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user);
-      setSnackbarMessage(user ? "Você está logado!" : "Voce não está logado!");
-      setSnackbarSeverity(user ? "success" : "error");
-      setSnackbarOpen(true);
-    });
+    setPersistence(auth, browserLocalPersistence)
+      .then(() => {
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+          setUser(user);
+          setSnackbarMessage(user ? "Você está logado!" : "Voce não está logado!");
+          setSnackbarSeverity(user ? "success" : "error");
+          setSnackbarOpen(true);
+        });
 
-    getRedirectResult(auth)
-      .then((result) => {
-        if (result) {
-          const user = result.user;
-          const credential = GoogleAuthProvider.credentialFromResult(result);
-          const token = credential?.accessToken;
-        }
+        getRedirectResult(auth)
+          .then((result) => {
+            if (result) {
+              const user = result.user;
+              const credential = GoogleAuthProvider.credentialFromResult(result);
+              const token = credential?.accessToken;
+            }
+          })
+          .catch((error) => {
+            console.error(error);
+            setSnackbarMessage("Erro ao fazer login");
+            setSnackbarSeverity("error");
+            setSnackbarOpen(true);
+          })
+          .finally(() => setLoading(false));
+
+        return () => unsubscribe();
       })
       .catch((error) => {
         console.error(error);
@@ -46,10 +63,8 @@ export default function Home({ toggleTheme }: HomeProps) {
         setSnackbarOpen(true);
       })
       .finally(() => setLoading(false));
-
-    return () => unsubscribe();
   }, []);
-
+  
   const handleSignIn = () => {
     handleGoogleSignIn()
       .then((result) => {

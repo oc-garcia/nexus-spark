@@ -44,6 +44,10 @@ export default function Home({ toggleTheme }: HomeProps) {
               const user = result.user;
               const credential = GoogleAuthProvider.credentialFromResult(result);
               const token = credential?.accessToken;
+
+              if (token) {
+                localStorage.setItem("token", token);
+              }
             }
           })
           .catch((error) => {
@@ -64,7 +68,7 @@ export default function Home({ toggleTheme }: HomeProps) {
       })
       .finally(() => setLoading(false));
   }, []);
-  
+
   const handleSignIn = () => {
     handleGoogleSignIn()
       .then((result) => {

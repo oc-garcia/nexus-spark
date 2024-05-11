@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import LoggedOut from "@/components/LoggedOut";
 import LoggedIn from "@/components/LoggedIn";
 import { useUser } from "@/context/UserContext";
+import { handleGoogleSignIn } from "@/services/auth";
 
 interface HomeProps {
   toggleTheme: () => void;
@@ -49,24 +50,24 @@ export default function Home({ toggleTheme }: HomeProps) {
     return () => unsubscribe();
   }, []);
 
-  const handleGoogleSignIn = () => {
-    signInWithRedirect(auth, provider).catch((error) => {
-      console.error(error);
-      signInWithPopup(auth, provider)
-        .then((result) => {
+  const handleSignIn = () => {
+    handleGoogleSignIn()
+      .then((result) => {
+        if (result) {
           const credential = GoogleAuthProvider.credentialFromResult(result);
           const token = credential?.accessToken;
           const user = result.user;
           setUser(user);
-        })
-        .catch((error) => {
-          console.error(error);
-          setSnackbarMessage("Erro ao fazer login");
-          setSnackbarSeverity("error");
-          setSnackbarOpen(true);
-        });
-    });
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        setSnackbarMessage("Erro ao fazer login");
+        setSnackbarSeverity("error");
+        setSnackbarOpen(true);
+      });
   };
+
   const handleSnackbarClose = (event: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === "clickaway") {
       return;
@@ -110,7 +111,7 @@ export default function Home({ toggleTheme }: HomeProps) {
         ) : user ? (
           <LoggedIn user={user} />
         ) : (
-          <LoggedOut handleGoogleSignIn={handleGoogleSignIn} />
+          <LoggedOut handleSignIn={handleSignIn} />
         )}
         <Snackbar open={snackbarOpen} autoHideDuration={3000} onClose={handleSnackbarClose}>
           <Alert onClose={handleSnackbarClose} severity={snackbarSeverity} sx={{ width: "100%" }}>

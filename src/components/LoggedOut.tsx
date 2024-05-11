@@ -3,10 +3,10 @@ import { Box, useTheme } from "@mui/system";
 import GoogleIcon from "@mui/icons-material/Google";
 
 interface LoggedOutProps {
-  handleGoogleSignIn: () => void;
+  handleSignIn: () => void;
 }
 
-const LoggedOut: React.FC<LoggedOutProps> = ({ handleGoogleSignIn }) => {
+const LoggedOut: React.FC<LoggedOutProps> = ({ handleSignIn }) => {
   const theme = useTheme();
 
   return (
@@ -31,14 +31,14 @@ const LoggedOut: React.FC<LoggedOutProps> = ({ handleGoogleSignIn }) => {
           variant="body1"
           gutterBottom
           style={{ color: theme.palette.mode === "dark" ? theme.palette.info.dark : theme.palette.info.main }}>
-          Esse modelo foi treinado para atendimento de consultas com um advogado chamado Octávio.
+          POC: Esse modelo foi treinado para atendimento de consultas com um advogado chamado Octávio.
         </Typography>
         <Button
           startIcon={<GoogleIcon />}
           size="large"
           variant="contained"
           color={theme.palette.mode === "dark" ? "primary" : "secondary"}
-          onClick={handleGoogleSignIn}>
+          onClick={handleSignIn}>
           Entrar
         </Button>
       </div>

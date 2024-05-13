@@ -8,7 +8,7 @@ import AutorenewIcon from "@mui/icons-material/Autorenew";
 import { keyframes } from "@emotion/react";
 import { v4 as uuidv4 } from "uuid";
 import { systemDirective } from "@/utils/geminiDirectives";
-import { User } from "firebase/auth";
+import { User } from "@/interfaces/IUser";
 
 interface ChatProps {
   user: User | null;

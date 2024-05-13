@@ -1,5 +1,5 @@
+import { User } from "@/interfaces/IUser";
 import React, { useState, useContext, ReactNode } from "react";
-import { User } from "firebase/auth";
 
 interface UserContextProps {
   user: User | null;

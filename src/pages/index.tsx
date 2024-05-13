@@ -14,6 +14,7 @@ import LoggedOut from "@/components/LoggedOut";
 import LoggedIn from "@/components/LoggedIn";
 import { useUser } from "@/context/UserContext";
 import { handleGoogleSignIn } from "@/services/auth";
+import { IUser } from "@/interfaces/IUser";
 
 interface HomeProps {
   toggleTheme: () => void;
@@ -41,9 +42,22 @@ export default function Home({ toggleTheme }: HomeProps) {
         getRedirectResult(auth)
           .then((result) => {
             if (result) {
-              const user = result.user;
-              const credential = GoogleAuthProvider.credentialFromResult(result);
-              const token = credential?.accessToken;
+              const user: any = result.user;
+              return user;
+            }
+          })
+          .then((user) => {
+            if (user) {
+              return user;
+            }
+          })
+          .then((user) => {
+            if (user && user.apiKey && user.appName) {
+              localStorage.setItem(
+                `firebase:authUser:${JSON.stringify(user.apiKey)}:${JSON.stringify(user.appName)}`,
+                JSON.stringify(user)
+              );
+              setUser(user);
             }
           })
           .catch((error) => {
@@ -69,9 +83,21 @@ export default function Home({ toggleTheme }: HomeProps) {
     handleGoogleSignIn()
       .then((result) => {
         if (result) {
-          const credential = GoogleAuthProvider.credentialFromResult(result);
-          const token = credential?.accessToken;
-          const user = result.user;
+          const user: any = result.user;
+          return user;
+        }
+      })
+      .then((user) => {
+        if (user) {
+          return user;
+        }
+      })
+      .then((user) => {
+        if (user && user.apiKey && user.appName) {
+          localStorage.setItem(
+            `firebase:authUser:${JSON.stringify(user.apiKey)}:${JSON.stringify(user.appName)}`,
+            JSON.stringify(user)
+          );
           setUser(user);
         }
       })

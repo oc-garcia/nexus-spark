@@ -1,7 +1,7 @@
 import { Avatar, Typography, useTheme } from "@mui/material";
 import { Box } from "@mui/system";
-import { User } from "firebase/auth";
 import Chat from "./Chat";
+import { User } from "@/interfaces/IUser";
 
 interface LoggedInProps {
   user: User | null;

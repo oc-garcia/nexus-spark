@@ -44,13 +44,6 @@ export default function Home({ toggleTheme }: HomeProps) {
               const user = result.user;
               const credential = GoogleAuthProvider.credentialFromResult(result);
               const token = credential?.accessToken;
-              console.log("user", user);
-              console.log("credential", credential);
-              console.log("oi");
-              if (token) {
-                console.log("token", token);
-                localStorage.setItem("token", token);
-              }
             }
           })
           .catch((error) => {

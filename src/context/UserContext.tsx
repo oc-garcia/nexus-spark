@@ -1,9 +1,12 @@
 import { User } from "firebase/auth";
-import React, { useState, useContext, ReactNode } from "react";
+import React, { useState, useContext, ReactNode, useEffect } from "react";
+import { signInWithPopup, signOut, onAuthStateChanged, GoogleAuthProvider } from "firebase/auth";
+import { auth } from "@/firebase/firebase";
 
 interface UserContextProps {
   user: User | null;
-  setUser: React.Dispatch<React.SetStateAction<User | null>>;
+  googleSignIn: () => void;
+  logOut: () => void;
 }
 
 const UserContext = React.createContext<UserContextProps | undefined>(undefined);
@@ -15,7 +18,23 @@ interface UserProviderProps {
 export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
 
-  return <UserContext.Provider value={{ user, setUser }}>{children}</UserContext.Provider>;
+  const googleSignIn = async () => {
+    const provider = new GoogleAuthProvider();
+    await signInWithPopup(auth, provider);
+  };
+
+  const logOut = () => {
+    signOut(auth);
+  };
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+    });
+    return () => unsubscribe();
+  }, [user]);
+
+  return <UserContext.Provider value={{ user, googleSignIn, logOut }}>{children}</UserContext.Provider>;
 };
 
 export const useUser = (): UserContextProps => {

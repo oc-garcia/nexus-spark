@@ -8,7 +8,6 @@ import { useEffect, useState } from "react";
 import LoggedOut from "@/components/LoggedOut";
 import LoggedIn from "@/components/LoggedIn";
 import { useUser } from "@/context/UserContext";
-import { handleGoogleSignIn } from "@/services/auth";
 
 interface HomeProps {
   toggleTheme: () => void;
@@ -16,61 +15,37 @@ interface HomeProps {
 
 export default function Home({ toggleTheme }: HomeProps) {
   const [loading, setLoading] = useState(true);
-  const { user, setUser } = useUser();
+  const { user, googleSignIn } = useUser();
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "info" | "warning" | "error">("info");
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user);
-      setSnackbarMessage(user ? "Você está logado!" : "Voce não está logado!");
-      setSnackbarSeverity(user ? "success" : "error");
+  const handleSignIn = async () => {
+    try {
+      await googleSignIn();
+      setSnackbarMessage("Logado com sucesso");
+      setSnackbarSeverity("success");
       setSnackbarOpen(true);
-    });
-
-    getRedirectResult(auth)
-      .then((result) => {
-        if (result) {
-          const credential = GoogleAuthProvider.credentialFromResult(result);
-          setUser(result.user);
-          console.log(user);
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-        setSnackbarMessage("Erro ao fazer login");
-        setSnackbarSeverity("error");
-        setSnackbarOpen(true);
-      })
-      .finally(() => setLoading(false));
-
-    return () => unsubscribe();
-  }, []);
-
-  const handleSignIn = () => {
-    handleGoogleSignIn()
-      .then((result) => {
-        if (result) {
-          const credential = GoogleAuthProvider.credentialFromResult(result);
-          const token = credential?.accessToken;
-          const user = result.user;
-          setUser(user);
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-        setSnackbarMessage("Erro ao fazer login");
-        setSnackbarSeverity("error");
-        setSnackbarOpen(true);
-      });
+    } catch (error) {
+      console.log(error);
+      setSnackbarMessage("Erro ao fazer login");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
+    }
   };
+
+  useEffect(() => {
+    const checkAuthentication = async () => {
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+      setLoading(false);
+    };
+    checkAuthentication();
+  }, [user]);
 
   const handleSnackbarClose = (event: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === "clickaway") {
       return;
     }
-
     setSnackbarOpen(false);
   };
 

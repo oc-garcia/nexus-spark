@@ -1,9 +1,6 @@
 import TopBar from "@/components/TopBar";
 import Footer from "@/components/Footer";
 import { Alert, Box, Skeleton, Snackbar } from "@mui/material";
-import { auth } from "@/firebase/firebase";
-import { signInWithPopup } from "firebase/auth";
-import { getRedirectResult, GoogleAuthProvider, onAuthStateChanged, signInWithRedirect } from "firebase/auth";
 import { useEffect, useState } from "react";
 import LoggedOut from "@/components/LoggedOut";
 import LoggedIn from "@/components/LoggedIn";

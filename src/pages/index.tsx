@@ -14,7 +14,6 @@ import LoggedOut from "@/components/LoggedOut";
 import LoggedIn from "@/components/LoggedIn";
 import { useUser } from "@/context/UserContext";
 import { handleGoogleSignIn } from "@/services/auth";
-import { IUser } from "@/interfaces/IUser";
 
 interface HomeProps {
   toggleTheme: () => void;
@@ -32,7 +31,7 @@ export default function Home({ toggleTheme }: HomeProps) {
   useEffect(() => {
     setPersistence(auth, browserLocalPersistence)
       .then(() => {
-        const unsubscribe = onAuthStateChanged(auth, (user) => {
+        const unsubscribe = onAuthStateChanged(auth, (user: any) => {
           setUser(user);
           setSnackbarMessage(user ? "Você está logado!" : "Voce não está logado!");
           setSnackbarSeverity(user ? "success" : "error");

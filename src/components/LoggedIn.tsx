@@ -1,10 +1,10 @@
 import { Avatar, Typography, useTheme } from "@mui/material";
 import { Box } from "@mui/system";
 import Chat from "./Chat";
-import { User } from "@/interfaces/IUser";
+import { IUser } from "@/interfaces/IUser";
 
 interface LoggedInProps {
-  user: User | null;
+  user: IUser | null;
 }
 
 const LoggedIn: React.FC<LoggedInProps> = ({ user }) => {

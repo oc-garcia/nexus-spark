@@ -2,13 +2,8 @@ import TopBar from "@/components/TopBar";
 import Footer from "@/components/Footer";
 import { Alert, Box, Skeleton, Snackbar } from "@mui/material";
 import { auth } from "@/firebase/firebase";
-import {
-  browserLocalPersistence,
-  getRedirectResult,
-  GoogleAuthProvider,
-  onAuthStateChanged,
-  setPersistence,
-} from "firebase/auth";
+import { signInWithPopup } from "firebase/auth";
+import { getRedirectResult, GoogleAuthProvider, onAuthStateChanged, signInWithRedirect } from "firebase/auth";
 import { useEffect, useState } from "react";
 import LoggedOut from "@/components/LoggedOut";
 import LoggedIn from "@/components/LoggedIn";
@@ -26,48 +21,21 @@ export default function Home({ toggleTheme }: HomeProps) {
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "info" | "warning" | "error">("info");
 
-  const provider = new GoogleAuthProvider();
-
   useEffect(() => {
-    setPersistence(auth, browserLocalPersistence)
-      .then(() => {
-        const unsubscribe = onAuthStateChanged(auth, (user: any) => {
-          setUser(user);
-          setSnackbarMessage(user ? "Você está logado!" : "Voce não está logado!");
-          setSnackbarSeverity(user ? "success" : "error");
-          setSnackbarOpen(true);
-        });
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setUser(user);
+      setSnackbarMessage(user ? "Você está logado!" : "Voce não está logado!");
+      setSnackbarSeverity(user ? "success" : "error");
+      setSnackbarOpen(true);
+    });
 
-        getRedirectResult(auth)
-          .then((result) => {
-            if (result) {
-              const user: any = result.user;
-              return user;
-            }
-          })
-          .then((user) => {
-            if (user) {
-              return user;
-            }
-          })
-          .then((user) => {
-            if (user && user.apiKey && user.appName) {
-              localStorage.setItem(
-                `firebase:authUser:${JSON.stringify(user.apiKey)}:${JSON.stringify(user.appName)}`,
-                JSON.stringify(user)
-              );
-              setUser(user);
-            }
-          })
-          .catch((error) => {
-            console.error(error);
-            setSnackbarMessage("Erro ao fazer login");
-            setSnackbarSeverity("error");
-            setSnackbarOpen(true);
-          })
-          .finally(() => setLoading(false));
-
-        return () => unsubscribe();
+    getRedirectResult(auth)
+      .then((result) => {
+        if (result) {
+          const credential = GoogleAuthProvider.credentialFromResult(result);
+          setUser(result.user);
+          console.log(user);
+        }
       })
       .catch((error) => {
         console.error(error);
@@ -76,27 +44,17 @@ export default function Home({ toggleTheme }: HomeProps) {
         setSnackbarOpen(true);
       })
       .finally(() => setLoading(false));
+
+    return () => unsubscribe();
   }, []);
 
   const handleSignIn = () => {
     handleGoogleSignIn()
       .then((result) => {
         if (result) {
-          const user: any = result.user;
-          return user;
-        }
-      })
-      .then((user) => {
-        if (user) {
-          return user;
-        }
-      })
-      .then((user) => {
-        if (user && user.apiKey && user.appName) {
-          localStorage.setItem(
-            `firebase:authUser:${JSON.stringify(user.apiKey)}:${JSON.stringify(user.appName)}`,
-            JSON.stringify(user)
-          );
+          const credential = GoogleAuthProvider.credentialFromResult(result);
+          const token = credential?.accessToken;
+          const user = result.user;
           setUser(user);
         }
       })

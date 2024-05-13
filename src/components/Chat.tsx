@@ -8,10 +8,10 @@ import AutorenewIcon from "@mui/icons-material/Autorenew";
 import { keyframes } from "@emotion/react";
 import { v4 as uuidv4 } from "uuid";
 import { systemDirective } from "@/utils/geminiDirectives";
-import { IUser } from "@/interfaces/IUser";
+import { User } from "firebase/auth";
 
 interface ChatProps {
-  user: IUser | null;
+  user: User | null;
 }
 
 const Chat: React.FC<ChatProps> = ({ user }) => {

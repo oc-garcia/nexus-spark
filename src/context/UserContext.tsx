@@ -1,9 +1,9 @@
-import { IUser } from "@/interfaces/IUser";
+import { User } from "firebase/auth";
 import React, { useState, useContext, ReactNode } from "react";
 
 interface UserContextProps {
-  user: IUser | null;
-  setUser: React.Dispatch<React.SetStateAction<IUser | null>>;
+  user: User | null;
+  setUser: React.Dispatch<React.SetStateAction<User | null>>;
 }
 
 const UserContext = React.createContext<UserContextProps | undefined>(undefined);
@@ -13,7 +13,7 @@ interface UserProviderProps {
 }
 
 export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
-  const [user, setUser] = useState<IUser | null>(null);
+  const [user, setUser] = useState<User | null>(null);
 
   return <UserContext.Provider value={{ user, setUser }}>{children}</UserContext.Provider>;
 };

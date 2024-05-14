@@ -45,8 +45,11 @@ export async function runChat(userInput: string, history: IMessage[]) {
     const result = await chat.sendMessage(userInput);
     const response = result.response;
     return response.text();
-  } catch (error) {
-    console.error("An error occurred while running the chat:", error);
+  } catch (error: any) {
+    if (error.status === 429 || error.statusCode === 429) {
+      return "Quota exceeded";
+    }
+    console.error("An error occurred:", error);
     return "error";
   }
 }

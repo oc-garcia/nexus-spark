@@ -19,6 +19,7 @@ const Chat: React.FC<ChatProps> = ({ user }) => {
   const [newMessage, setNewMessage] = useState("");
   const [isSending, setIsSending] = useState(false);
   const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
   const theme = useTheme();
 
   const handleNewMessageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -38,6 +39,15 @@ const Chat: React.FC<ChatProps> = ({ user }) => {
       setNewMessage("");
       setIsSending(false);
       setOpenSnackbar(true);
+      setSnackbarMessage("Ocorreu um erro. Chat reiniciado.");
+      return;
+    }
+    if (responseText === "Quota exceeded") {
+      setMessages([...systemDirective]);
+      setNewMessage("");
+      setIsSending(false);
+      setOpenSnackbar(true);
+      setSnackbarMessage("Limite de uso excedido. Essa é uma versão gratuita. Tente novamente mais tarte. Chat reiniciado.");
       return;
     }
     const botMessage: IMessage = {
@@ -112,7 +122,7 @@ const Chat: React.FC<ChatProps> = ({ user }) => {
       </Box>
       <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={handleCloseSnackbar}>
         <Alert onClose={handleCloseSnackbar} severity="error" sx={{ width: "100%" }}>
-          Ocorreu um erro. O chat foi reiniciado.
+          {snackbarMessage}
         </Alert>
       </Snackbar>
     </Box>

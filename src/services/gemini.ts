@@ -14,7 +14,7 @@ export async function runChat(userInput: string, history: IMessage[]) {
       temperature: 1,
       topK: 0,
       topP: 0.95,
-      maxOutputTokens: 24576,
+      maxOutputTokens: 8192,
     };
 
     const safetySettings = [
